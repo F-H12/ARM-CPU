@@ -7,7 +7,7 @@ reg [31:0] InstructionMemory[0:Size-1];
 
 //use clock for writing memory
 
-always@(*)
+
 instr = InstructionMemory[address];
 
 endmodule 
