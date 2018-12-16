@@ -8,10 +8,4 @@
 # //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
-# OpenFile C:/Users/Hejazi/Documents/GitHub/ARM-CPU/InstMemory.v 
-# Cannot determine language of C:/Users/Hejazi/Documents/GitHub/ARM-CPU/insmem
-vlog -reportprogress 300 -work work C:/Users/Hejazi/Documents/GitHub/ARM-CPU/InstMemory.v
-# Model Technology ModelSim SE-64 vlog 10.1c Compiler 2012.07 Jul 27 2012
-# ** Error: (vlog-19) Failed to access library 'work' at "work".
-# 
-# No such file or directory. (errno = ENOENT)
+# OpenFile C:/Users/Hejazi/Documents/GitHub/ARM-CPU/ALU.v 
