@@ -1,7 +1,8 @@
 module Mux(dataA,dataB,s,outres);
-  input [63:0] dataA,dataB; 
+  parameter Size =64;
+  input [Size-1:0] dataA,dataB; 
   input s; 
-  output [63:0] outres;
+  output [Size-1:0] outres;
   
   
 	assign outres = (s)?dataA:dataB;
