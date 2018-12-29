@@ -19,4 +19,5 @@ end
 
 assign instr = InstructionMemory[address];
 
-endmodule 
+endmodule
+

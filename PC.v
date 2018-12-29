@@ -5,11 +5,14 @@ module PC
   input clk;
   input reset;
   output reg[63:0] Address;
-
+initial
+begin
+  Address=64'b0;
+end
 always@(posedge clk)
   begin
   if(reset)
-    Address = 64'bz;
+    Address = 64'b0;
   else
     Address = pc;
   end
