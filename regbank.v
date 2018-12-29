@@ -12,6 +12,7 @@ module regbank
   assign DataA = registers[AddrA];
   assign DataB = registers[AddrB];
 
+  integer j;
   initial begin
     for(j=0;j<31;j=j+1)
       registers[j] = j;
@@ -23,7 +24,7 @@ module regbank
   always @ (posedge Clk) 
   begin
     if(w)
-      if (AddrC <= 5'b11110)
+      if (AddrC < 5'b11111)
         //address 0 to 30.31 is not for write-zero
         registers[AddrC] <= DataC;
   end
