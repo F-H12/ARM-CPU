@@ -1,5 +1,5 @@
 module DataMemory
- #( parameter delay = 50,size=32)
+ #( parameter delay = 50,parameter size=32)
 (address,InData,outRead,write,read,clk);
 
 input [63:0] address,InData;
@@ -12,7 +12,7 @@ reg [63:0] Memory[0:Size-1];
 integer j;
 initial begin
 		for(j=0;j<32;j=j+1)
-			memory[j] = j;
+			Memory[j] = j;
 end
 
 assign outRead =(read)? Memory[address] : 64'd0;
