@@ -1,23 +1,55 @@
 module run();
-  wire clk;
-  wire pc,reset,Address;
-  wire PCAddr,const,out;
-  wire input1,input2,OP,ALUOutput,zero;
-  wire AluOp,insOp,AluOpCode;
-  wire DataA, DataB, DataC, AddrA, AddrB, AddrC, w;
-  wire address,InData,outRead,write,read;
-  wire InsAddress,instr;
-  wire ExIn, ExOut;
-  wire dataA,dataB,s,outres;
-  
+  reg pcReset;
+  wire clk,zero,wReg,memRead,memWrite,RegWrite,Branch,,MemtoReg,Reg2Loc,,AluSrc,regMuxSelect;
+
+  wire [1:0]AluOp;
+  //wire [10: 0] insOp;
+  wire [3:0] AluOpCode;
+  wire [4:0] AddrA, AddrB, AddrC;
+  wire [31:0] instruction;
+
+  wire[63:0] zero,ExOut,shifted,pc,Address, DataA, DataB, DataC,input1,input2,ALUOutput,pcAddOut,outRead,jumpAddOut, aluMUXAdd,memMUXAdd,regMUXOut;
+
+  initial begin
+    pcReset = 1;
+    #200 pcReset = 0;
+
+  end
+
   clock c(clk);
+  Controller control(instruction[31:21],ALUOp,AluSrc,Branch,MemRead,MemWrite,RegWrite,MemtoReg,Reg2Loc);
   PC pcfunc(pc,clk,reset,Address);
-  PCAdder PCAdd(PCaddr,const,out);
-  ALU alu(input1,input2,OP,ALUOutput,zero);
-  AluControl ALUC(AluOp,insOp,AluOpCode);
-  regbank regb(DataA, DataB, DataC, AddrA, AddrB, AddrC, w, Clk);
-  DataMemory DataM(address,InData,outRead,write,read,clk);
-  InstructionMemory InsM(InsAddress,instr);
-  SignEx sign( ExIn, ExOut );
-  Mux mux(dataA,dataB,s,outres);
+  PCAdder PCAdd(Address,64'b100,pcAddOut);
+InstructionMemory imemory(pc,instruction);
+Mux regMUX(instruction[4:0],instruction[20:16],Reg2Loc,regMUXOut);
+
+regbank register( 
+         DataA, 
+         DataB, 
+         memMUXOut, 
+         instruction[9:5],
+         regMUXOut, 
+         instruction[4:0], 
+         wRegbank,clk,);
+
+  SignEx sign( instruction, ExOut );
+  Mux aluMUX(ExOut,DataB ,AluSrc, aluMUXOut);
+
+ALU alu(DataA, aluMUX_Out, AluOpCode, zero, ALUOutput);
+ALUcontrol aluC(AluOp,instruction[31:21],AluOpCode);
+shift2left shift(ExOut, shifted);
+//adder
+PCAdder jumpAdd(shifted,Address, jumpAddOut);
+Mux jumpMUX(jumpAddOut,pcAddOut,Branch&zero, pc);
+
+DataMemory DataM(ALUOutput,DataB,MemRead,MemWrite,outRead,clk);
+
+Mux memMUX(outRead,ALUOutput,MemtoReg ,  memMUXOut);
+
+
+
+
+
+
+
 endmodule

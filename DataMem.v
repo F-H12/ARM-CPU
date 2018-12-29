@@ -7,7 +7,7 @@ input read,write;
 output [63:0] outRead;
 input clk;
 
-reg [63:0] Memory[0:Size-1];
+reg [63:0] Memory[0:size-1];
 
 integer j;
 initial begin
