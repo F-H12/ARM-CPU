@@ -1,18 +1,16 @@
-module PC(pc,clk,reset,Address);
-  input [63:0] pc;
+module PC
+#(parameter n=64,parameter delay=100)
+(pc,clk,reset,Address);
+  input [n-1:0] pc;
   input clk;
   input reset;
-  output [63:0] Address;
-
-  reg [63:0] Data;
+  output reg[63:0] Address;
 
 always@(posedge clk)
   begin
   if(reset)
-    Data = 31'b0;
+    Address = 64'bz;
   else
-    Data = pc;
+    Address = pc;
   end
-assign Address = Data;
-
 endmodule
