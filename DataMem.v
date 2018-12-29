@@ -1,5 +1,6 @@
-module DataMemory(address,InData,outRead,write,read,clk);
-parameter Size = 256;
+module DataMemory
+ #( parameter delay = 50,size=32)
+(address,InData,outRead,write,read,clk);
 
 input [63:0] address,InData;
 input read,write;
@@ -7,6 +8,12 @@ output [63:0] outRead;
 input clk;
 
 reg [63:0] Memory[0:Size-1];
+
+integer j;
+initial begin
+		for(j=0;j<32;j=j+1)
+			memory[j] = j;
+end
 
 assign outRead =(read)? Memory[address] : 64'd0;
 always@(posedge clk)
