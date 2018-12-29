@@ -1,4 +1,6 @@
-module AluControl(AluOp,insOp,AluOpCode);
+module AluControl
+#(parameter delay=100)
+(AluOp,insOp,AluOpCode);
 input [1:0]AluOp;
 input [10: 0] insOp;
 output reg [3:0] AluOpCode;
