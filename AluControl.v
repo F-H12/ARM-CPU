@@ -1,31 +1,27 @@
 module AluControl
-#(parameter delay=100)
-(AluOp,insOp,AluOpCode);
-input [1:0]AluOp;
-input [10: 0] insOp;
-output reg [3:0] AluOpCode;
-
-
-always@(AluOp)
-begin
-
-if(AluOp==2'b00)
-AluOpCode = 4'b0010;
-
-else if(AluOp[0] == 1)
-AluOpCode = 4'b0111;
-
-else if(AluOp[1]==1 && insOp==11'b10001011000)
-AluOpCode = 4'b0010;
-
-else if(AluOp[1]==1 && insOp==11'b11001011000)
-AluOpCode = 4'b0110;
-
-else if(AluOp[1]==1 && insOp==11'b10001010000)
-AluOpCode = 4'b0000;
-
-else if(AluOp[1] && insOp==11'b10101011000)
-AluOpCode = 4'b0001;
-
-end
+  #(
+     parameter delay = 100
+    )
+    (
+      input [1:0] AluOp,
+      input [31:0] inst,
+      output reg[3:0] AluOpCode
+    );
+    
+    wire [5:0]opcheck;
+    assign opcheck = {AluOp, inst[30], inst[29], inst[24]};
+    
+    always @(opcheck) begin
+      AluOpCode = 4'b0;
+ 
+      casex(opcheck)
+        5'b00xxx: AluOpCode = 4'b0010;
+        5'bx1xxx: AluOpCode = 4'b0111;
+        5'b1x001: AluOpCode = 4'b0010;
+        5'b1x101: AluOpCode = 4'b0110;
+        5'b10000: AluOpCode = 4'b0000;
+        5'b1x010: AluOpCode = 4'b0001;
+      endcase
+    end
+  
 endmodule

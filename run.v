@@ -2,7 +2,7 @@ module run();
   reg pcReset;
   wire clk,zero,wReg,memRead,memWrite,RegWrite,Branch,MemtoReg,Reg2Loc,AluSrc;
 
-  wire [1:0]AluOp;
+  wire [1:0]ALUOp;
   //wire [10: 0] insOp;
   wire [3:0] AluOpCode;
   wire [4:0] regMUXOut;
@@ -23,7 +23,7 @@ module run();
   PC pcfunc(pc,clk,reset,Address);
   Adder PCAdd(Address,64'b100,pcAddOut);
 InstructionMemory imemory(Address,instruction);
-Mux regMUX(instruction[4:0],instruction[20:16],Reg2Loc,regMUXOut);
+Mux5 regMUX(instruction[4:0],instruction[20:16],Reg2Loc,regMUXOut);
 
 regbank register( 
          DataA, 
@@ -37,8 +37,8 @@ regbank register(
   SignEx sign( instruction, ExOut );
   Mux aluMUX(ExOut,DataB ,AluSrc, aluMUXOut);
 
-ALU alu(DataA, aluMUXOut, AluOpCode,ALUOutput, zero );
-AluControl aluC(AluOp,instruction[31:21],AluOpCode);
+ALU alu(DataA, aluMUXOut, AluOpCode, ALUOutput, zero );
+AluControl aluC(ALUOp,instruction,AluOpCode);
 shift shift2left(ExOut, shifted);
 Adder jumpAdd(shifted,Address, jumpAddOut);
 Mux jumpMUX(jumpAddOut,pcAddOut,Branch&zero, pc);

@@ -15,7 +15,7 @@ module regbank
   integer j;
   initial begin
     for(j=0;j<31;j=j+1)
-      registers[j] = j;
+      registers[j] = 64'b10;
 
     registers[31]=0;    
   end

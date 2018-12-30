@@ -9,7 +9,7 @@ module ALU
 
   always@(input1,input2,OP)
   begin
-    ALUOutput = 64'bz;
+    ALUOutput = 64'b0;
     case(OP)
 
     4'b0000: ALUOutput = input1&input2;
@@ -22,5 +22,5 @@ module ALU
 
   end
 
-  assign zero = (ALUOutput==0)? 1: 0;
+  assign zero = (ALUOutput==64'd0)? 1: 0;
 endmodule
