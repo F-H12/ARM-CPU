@@ -19,7 +19,7 @@ module run();
   clock c(clk);
   Controller control(instruction[31:21],ALUOp,AluSrc,Branch,MemRead,MemWrite,RegWrite,MemtoReg,Reg2Loc);
   PC pcfunc(pc,clk,reset,Address);
-  PCAdder PCAdd(Address,64'b100,pcAddOut);
+  Adder PCAdd(Address,64'b100,pcAddOut);
 InstructionMemory imemory(Address,instruction);
 Mux regMUX(instruction[4:0],instruction[20:16],Reg2Loc,regMUXOut);
 
@@ -35,14 +35,13 @@ regbank register(
   SignEx sign( instruction, ExOut );
   Mux aluMUX(ExOut,DataB ,AluSrc, aluMUXOut);
 
-ALU alu(DataA, aluMUX_Out, AluOpCode, zero, ALUOutput);
+ALU alu(DataA, aluMUXOut, AluOpCode, zero, ALUOutput);
 Controller aluC(AluOp,instruction[31:21],AluOpCode);
 shift shift2left(ExOut, shifted);
-//adder
-PCAdder jumpAdd(shifted,Address, jumpAddOut);
+Adder jumpAdd(shifted,Address, jumpAddOut);
 Mux jumpMUX(jumpAddOut,pcAddOut,Branch&zero, pc);
 
 DataMemory DataM(ALUOutput,DataB,MemRead,MemWrite,outRead,clk);
 
-Mux memMUX(outRead,ALUOutput,MemtoReg ,  memMUXOut);
+Mux memMUX(outRead,ALUOutput,MemtoReg ,memMUXOut);
 endmodule

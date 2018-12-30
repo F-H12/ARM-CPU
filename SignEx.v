@@ -11,6 +11,6 @@ begin
 		ExOut={{45{ExIn[23]}},ExIn[23:5]};
 		//LDUR & STUR
 	else if(ExIn[30]==1'b1)
-		ExOut={{55{ExIn[23]}},ExIn[20:12]};
+		ExOut={{55{ExIn[20]}},ExIn[20:12]};
 end
 endmodule
