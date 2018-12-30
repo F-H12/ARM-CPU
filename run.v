@@ -1,14 +1,14 @@
 module run();
   reg pcReset;
-  wire clk,zero,wReg,memRead,memWrite,RegWrite,Branch,MemtoReg,Reg2Loc,AluSrc,regMuxSelect;
+  wire clk,zero,wReg,memRead,memWrite,RegWrite,Branch,MemtoReg,Reg2Loc,AluSrc;
 
   wire [1:0]AluOp;
   //wire [10: 0] insOp;
   wire [3:0] AluOpCode;
-  wire [4:0] AddrA, AddrB, AddrC;
+  wire [4:0] regMUXOut;
   wire [31:0] instruction;
 
-  wire[63:0] ExOut,shifted,pc,Address, DataA, DataB, DataC,input1,input2,ALUOutput,pcAddOut,outRead,jumpAddOut, aluMUXAdd,memMUXAdd,regMUXOut;
+  wire[63:0] ExOut,shifted,pc,Address, DataA, DataB,input1,input2,ALUOutput,pcAddOut,outRead,jumpAddOut, aluMUXOut,memMUXOut;
 
   initial begin
     pcReset = 1;
