@@ -1,4 +1,3 @@
-`default_nettype none
 module run();
   reg pcReset;
   wire clk,zero,wReg,memRead,memWrite,RegWrite,Branch,MemtoReg,Reg2Loc,AluSrc;
@@ -20,8 +19,8 @@ module run();
 
   end
   
-  Controller control(instruction[31:21],ALUOp,AluSrc,Branch,memRead,memWrite,RegWrite,MemtoReg,Reg2Loc);
-  PC pcfunc(pc,clk,pcReset,Address);
+  Controller control(instruction[31:21],ALUOp,AluSrc,Branch,MemRead,MemWrite,RegWrite,MemtoReg,Reg2Loc);
+  PC pcfunc(pc,clk,reset,Address);
   Adder PCAdd(Address,64'b100,pcAddOut);
 InstructionMemory imemory(Address,instruction);
 Mux5 regMUX(instruction[4:0],instruction[20:16],Reg2Loc,regMUXOut);
@@ -33,7 +32,7 @@ regbank register(
          instruction[9:5],
          regMUXOut, 
          instruction[4:0], 
-         RegWrite,clk);
+         wRegbank,clk);
 
   SignEx sign( instruction, ExOut );
   Mux aluMUX(ExOut,DataB ,AluSrc, aluMUXOut);
@@ -44,7 +43,7 @@ shift shift2left(ExOut, shifted);
 Adder jumpAdd(shifted,Address, jumpAddOut);
 Mux jumpMUX(jumpAddOut,pcAddOut,Branch&zero, pc);
 
-DataMemory DataM(ALUOutput,DataB,outRead,memWrite,memRead,clk);
+DataMemory DataM(ALUOutput,DataB,outRead,MemWrite,MemRead,clk);
 
 Mux memMUX(outRead,ALUOutput,MemtoReg ,memMUXOut);
 endmodule
